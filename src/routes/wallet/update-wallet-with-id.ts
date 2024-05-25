@@ -6,40 +6,45 @@ import { prisma } from '@/database/prisma'
 
 import { auth } from '../middlewares/auth'
 
-export async function createWallet(app: FastifyInstance) {
+export async function updateWalletWithId(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
-    .post(
-      '/wallet',
+    .put(
+      '/wallet/:id',
       {
         schema: {
           tags: ['Wallet'],
-          summary: 'Create wallet',
+          summary: 'Update a wallet with ID',
           body: z.object({
             name: z.string(),
             balance: z.number(),
           }),
+          params: z.object({
+            id: z.string(),
+          }),
           response: {
-            201: z.object({
-              walletId: z.string(),
-            }),
+            200: z.null(),
           },
         },
       },
       async (request, reply) => {
-        const { balance, name } = request.body
+        const { name, balance } = request.body
+        const { id } = request.params
         const userId = await request.getCurrentUserId()
 
-        const wallet = await prisma.wallet.create({
+        await prisma.wallet.update({
           data: {
             name,
             balance,
+          },
+          where: {
+            id,
             userId,
           },
         })
 
-        return reply.send({ walletId: wallet.id })
+        return reply.status(200).send()
       },
     )
 }
