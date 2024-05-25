@@ -40,6 +40,7 @@ CREATE TABLE "categories" (
     "icon" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
+    "user_id" TEXT NOT NULL,
 
     CONSTRAINT "categories_pkey" PRIMARY KEY ("id")
 );
@@ -55,8 +56,9 @@ CREATE TABLE "transactions" (
     "updated_at" TIMESTAMP(3) NOT NULL,
     "user_id" TEXT NOT NULL,
     "category_id" TEXT,
-    "wallet_id" TEXT NOT NULL,
+    "wallet_id" TEXT,
     "credit_cart_id" TEXT,
+    "investments_id" TEXT,
 
     CONSTRAINT "transactions_pkey" PRIMARY KEY ("id")
 );
@@ -91,6 +93,8 @@ CREATE TABLE "investiments" (
 -- CreateTable
 CREATE TABLE "credit_carts" (
     "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "owner_current_name" TEXT NOT NULL,
     "number" TEXT NOT NULL,
     "cvv" TEXT NOT NULL,
     "expiration" TEXT NOT NULL,
@@ -111,16 +115,22 @@ CREATE UNIQUE INDEX "wallets_name_key" ON "wallets"("name");
 ALTER TABLE "tokens" ADD CONSTRAINT "tokens_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "categories" ADD CONSTRAINT "categories_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "transactions" ADD CONSTRAINT "transactions_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "transactions" ADD CONSTRAINT "transactions_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "categories"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "transactions" ADD CONSTRAINT "transactions_wallet_id_fkey" FOREIGN KEY ("wallet_id") REFERENCES "wallets"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "transactions" ADD CONSTRAINT "transactions_wallet_id_fkey" FOREIGN KEY ("wallet_id") REFERENCES "wallets"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "transactions" ADD CONSTRAINT "transactions_credit_cart_id_fkey" FOREIGN KEY ("credit_cart_id") REFERENCES "credit_carts"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "transactions" ADD CONSTRAINT "transactions_investments_id_fkey" FOREIGN KEY ("investments_id") REFERENCES "investiments"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "wallets" ADD CONSTRAINT "wallets_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

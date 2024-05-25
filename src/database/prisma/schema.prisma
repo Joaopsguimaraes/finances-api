@@ -16,10 +16,11 @@ model User {
   createdAt    DateTime       @default(now()) @map("created_at")
   updatedAt    DateTime       @updatedAt @map("updated_at")
   tokens       Token[]
-  Transaction  Transaction[]
-  Wallet       Wallet[]
-  Investiments Investiments[]
-  CreditCart   CreditCart[]
+  transactions Transaction[]
+  wallets      Wallet[]
+  investiments Investiments[]
+  creditCarts  CreditCart[]
+  categories   Category[]
 
   @@map("users")
 }
@@ -59,11 +60,14 @@ model Token {
 
 model Category {
   id          String        @id @default(uuid())
-  name        String
+  name        String        @unique
   icon        String
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @updatedAt @map("updated_at")
   Transaction Transaction[]
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
 
   @@map("categories")
 }
@@ -126,7 +130,7 @@ model CreditCart {
   id               String   @id @default(uuid())
   name             String
   ownerCurrentName String   @map("owner_current_name")
-  number           String
+  number           String   @unique
   cvv              String
   expiration       String
   createdAt        DateTime @default(now()) @map("created_at")

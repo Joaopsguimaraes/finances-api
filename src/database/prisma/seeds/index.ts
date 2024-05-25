@@ -36,6 +36,7 @@ async function seed() {
     data: {
       icon: 'monitor-icon',
       name: 'Assinaturas',
+      userId: user.id,
     },
   })
 
@@ -43,6 +44,7 @@ async function seed() {
     data: {
       icon: 'house-icon',
       name: 'Moradia',
+      userId: user.id,
     },
   })
 
@@ -50,6 +52,7 @@ async function seed() {
     data: {
       icon: 'currency-icon',
       name: 'Salario',
+      userId: user.id,
     },
   })
 
@@ -57,6 +60,7 @@ async function seed() {
     data: {
       icon: 'chart-icon',
       name: 'Investimentos',
+      userId: user.id,
     },
   })
 
