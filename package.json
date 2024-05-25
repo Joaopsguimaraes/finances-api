@@ -33,6 +33,10 @@
     "prisma": "^5.14.0",
     "typescript": "^5.4.5"
   },
+  "prisma":{
+    "schema": "src/database/prisma/schema.prisma",
+    "seed": "tsx src/database/prisma/seeds/index.ts"
+  },
   "prettier": {
     "printWidth": 80,
     "tabWidth": 2,
