@@ -64,7 +64,7 @@ async function seed() {
     },
   })
 
-  const interCreditCart = await prisma.creditCart.create({
+  const interCreditCard = await prisma.creditCard.create({
     data: {
       name: 'Cartão Inter João',
       ownerCurrentName: 'JOAO S GUIMARAES',
@@ -102,7 +102,7 @@ async function seed() {
         date: new Date(),
         userId: user.id,
         categoryId: subscriptionsCategory.id,
-        creditCartId: interCreditCart.id,
+        creditCardId: interCreditCard.id,
       },
     ],
   })
@@ -119,14 +119,14 @@ async function seed() {
 
   await prisma.transaction.create({
     data: {
-      type: 'INVESTMENT',
+      type: 'INVESTIMENT',
       amount: 1000,
       description: 'Investimento em LCA',
       date: new Date(),
       userId: user.id,
       categoryId: investmentsCategory.id,
       walletId: interInvestmentsWallet.id,
-      investmentsId: investmentsLCA.id,
+      investimentsId: investmentsLCA.id,
     },
   })
 }

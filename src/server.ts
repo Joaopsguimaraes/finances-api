@@ -10,11 +10,8 @@ import {
   type ZodTypeProvider,
 } from 'fastify-type-provider-zod'
 
+import { appRoutes } from './routes'
 import { errorHandler } from './routes/_errors/error-handler'
-import { authRoutes } from './routes/auth'
-import { categoryRoutes } from './routes/category'
-import { creditCartRoute } from './routes/credit-card'
-import { walletRoutes } from './routes/wallet'
 
 export const app = fastify().withTypeProvider<ZodTypeProvider>()
 
@@ -45,10 +42,7 @@ app.register(fastifySwaggerUi, {
   routePrefix: '/docs',
 })
 
-app.register(authRoutes)
-app.register(walletRoutes)
-app.register(categoryRoutes)
-app.register(creditCartRoute)
+app.register(appRoutes)
 
 app.listen({ port: 3333 }).then(() => {
   console.log('Server is running on port 3333')

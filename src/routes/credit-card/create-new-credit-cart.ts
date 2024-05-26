@@ -7,16 +7,16 @@ import { prisma } from '@/database/prisma'
 import { BadRequestError } from '../_errors/bad-request-error'
 import { auth } from '../middlewares/auth'
 
-export async function createCreditCart(app: FastifyInstance) {
+export async function createCreditCard(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .post(
-      '/credit-cart',
+      '/credit-card',
       {
         schema: {
           tags: ['Credit Cart'],
-          summary: 'Create an credit cart',
+          summary: 'Create an credit card',
           body: z.object({
             name: z.string(),
             ownerCurrentName: z.string(),
@@ -33,7 +33,7 @@ export async function createCreditCart(app: FastifyInstance) {
         const { name, ownerCurrentName, number, cvv, expiration } = request.body
         const userId = await request.getCurrentUserId()
 
-        const creditCardFounded = await prisma.creditCart.findUnique({
+        const creditCardFounded = await prisma.creditCard.findUnique({
           where: {
             number,
             userId,
@@ -44,7 +44,7 @@ export async function createCreditCart(app: FastifyInstance) {
           throw new BadRequestError('Credit Card already exists')
         }
 
-        await prisma.creditCart.create({
+        await prisma.creditCard.create({
           data: {
             name,
             ownerCurrentName,

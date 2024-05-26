@@ -7,16 +7,16 @@ import { prisma } from '@/database/prisma'
 import { BadRequestError } from '../_errors/bad-request-error'
 import { auth } from '../middlewares/auth'
 
-export async function deleteCreditCartWithId(app: FastifyInstance) {
+export async function deleteCreditCardWithId(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .delete(
-      '/credit-cart/:id',
+      '/credit-card/:id',
       {
         schema: {
-          tags: ['Credit Cart'],
-          summary: 'Delete an credit cart with ID',
+          tags: ['Credit Card'],
+          summary: 'Delete an credit card with ID',
           params: z.object({
             id: z.string(),
           }),
@@ -29,18 +29,18 @@ export async function deleteCreditCartWithId(app: FastifyInstance) {
         const { id } = request.params
         const userId = await request.getCurrentUserId()
 
-        const creditCartFounded = await prisma.creditCart.findUnique({
+        const creditCardFounded = await prisma.creditCard.findUnique({
           where: {
             id,
             userId,
           },
         })
 
-        if (!creditCartFounded) {
+        if (!creditCardFounded) {
           throw new BadRequestError('Credit Cart not found')
         }
 
-        await prisma.creditCart.delete({
+        await prisma.creditCard.delete({
           where: {
             id,
           },

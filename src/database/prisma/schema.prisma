@@ -19,7 +19,7 @@ model User {
   transactions Transaction[]
   wallets      Wallet[]
   investiments Investiments[]
-  creditCarts  CreditCart[]
+  creditCarts  CreditCard[]
   categories   Category[]
 
   @@map("users")
@@ -37,7 +37,7 @@ enum Role {
 enum TransactionType {
   INCOME
   EXPENSE
-  INVESTMENT
+  INVESTIMENT
 }
 
 enum InvestimentsType {
@@ -80,17 +80,19 @@ model Transaction {
   date        DateTime
   createdAt   DateTime        @default(now()) @map("created_at")
   updatedAt   DateTime        @updatedAt @map("updated_at")
+  isRepet     Boolean         @default(false) @map("is_repet")
+  repetTimes  Int?            @map("repet_times")
 
-  user          User          @relation(fields: [userId], references: [id])
-  userId        String        @map("user_id")
-  category      Category?     @relation(fields: [categoryId], references: [id])
-  categoryId    String?       @map("category_id")
-  wallet        Wallet?       @relation(fields: [walletId], references: [id])
-  walletId      String?       @map("wallet_id")
-  creditCard    CreditCart?   @relation(fields: [creditCartId], references: [id])
-  creditCartId  String?       @map("credit_cart_id")
-  investiment   Investiments? @relation(fields: [investmentsId], references: [id])
-  investmentsId String?       @map("investments_id")
+  user           User          @relation(fields: [userId], references: [id])
+  userId         String        @map("user_id")
+  category       Category?     @relation(fields: [categoryId], references: [id])
+  categoryId     String?       @map("category_id")
+  wallet         Wallet?       @relation(fields: [walletId], references: [id])
+  walletId       String?       @map("wallet_id")
+  creditCard     CreditCard?   @relation(fields: [creditCardId], references: [id])
+  creditCardId   String?       @map("credit_card_id")
+  investiment    Investiments? @relation(fields: [investimentsId], references: [id])
+  investimentsId String?       @map("investiments_id")
 
   @@map("transactions")
 }
@@ -126,7 +128,7 @@ model Investiments {
   @@map("investiments")
 }
 
-model CreditCart {
+model CreditCard {
   id               String   @id @default(uuid())
   name             String
   ownerCurrentName String   @map("owner_current_name")
@@ -140,5 +142,5 @@ model CreditCart {
   userId       String        @map("user_id")
   transactions Transaction[]
 
-  @@map("credit_carts")
+  @@map("credit_cards")
 }

@@ -6,16 +6,16 @@ import { prisma } from '@/database/prisma'
 
 import { auth } from '../middlewares/auth'
 
-export async function getAllCreditCarts(app: FastifyInstance) {
+export async function getAllCreditCards(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .get(
-      '/credit-cart',
+      '/credit-card',
       {
         schema: {
-          tags: ['Credit Cart'],
-          summary: 'Get a list of credit carts',
+          tags: ['Credit Card'],
+          summary: 'Get a list of credit cards',
           response: {
             200: z.array(
               z.object({
@@ -36,13 +36,13 @@ export async function getAllCreditCarts(app: FastifyInstance) {
       async (request, reply) => {
         const userId = await request.getCurrentUserId()
 
-        const allCreditCarts = await prisma.creditCart.findMany({
+        const allCreditCards = await prisma.creditCard.findMany({
           where: {
             userId,
           },
         })
 
-        return reply.status(200).send(allCreditCarts)
+        return reply.status(200).send(allCreditCards)
       },
     )
 }

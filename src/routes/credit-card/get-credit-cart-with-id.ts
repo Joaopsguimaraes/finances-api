@@ -7,16 +7,16 @@ import { prisma } from '@/database/prisma'
 import { BadRequestError } from '../_errors/bad-request-error'
 import { auth } from '../middlewares/auth'
 
-export async function getCreditCartWithId(app: FastifyInstance) {
+export async function getCreditCardWithId(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .get(
-      '/credit-cart/:id',
+      '/credit-card/:id',
       {
         schema: {
-          tags: ['Credit Cart'],
-          summary: 'Get an credit cart with ID',
+          tags: ['Credit Card'],
+          summary: 'Get an credit card with ID',
           params: z.object({
             id: z.string(),
           }),
@@ -39,18 +39,18 @@ export async function getCreditCartWithId(app: FastifyInstance) {
         const { id } = request.params
         const userId = await request.getCurrentUserId()
 
-        const creditCartFounded = await prisma.creditCart.findUnique({
+        const creditCardFounded = await prisma.creditCard.findUnique({
           where: {
             id,
             userId,
           },
         })
 
-        if (!creditCartFounded) {
+        if (!creditCardFounded) {
           throw new BadRequestError('Credit Cart not found')
         }
 
-        return reply.status(200).send(creditCartFounded)
+        return reply.status(200).send(creditCardFounded)
       },
     )
 }

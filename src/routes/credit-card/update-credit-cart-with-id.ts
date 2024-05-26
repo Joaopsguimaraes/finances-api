@@ -7,16 +7,16 @@ import { prisma } from '@/database/prisma'
 import { BadRequestError } from '../_errors/bad-request-error'
 import { auth } from '../middlewares/auth'
 
-export async function updateCreditCartWithId(app: FastifyInstance) {
+export async function updateCreditCardWithId(app: FastifyInstance) {
   app
     .withTypeProvider<ZodTypeProvider>()
     .register(auth)
     .put(
-      '/credit-cart/:id',
+      '/credit-card/:id',
       {
         schema: {
-          tags: ['Credit Cart'],
-          summary: 'Update an credit cart with ID',
+          tags: ['Credit Card'],
+          summary: 'Update an credit card with ID',
           params: z.object({
             id: z.string(),
           }),
@@ -39,18 +39,18 @@ export async function updateCreditCartWithId(app: FastifyInstance) {
         const { name, ownerCurrentName, number, cvv, expiration } = request.body
         const userId = await request.getCurrentUserId()
 
-        const creditCartFounded = await prisma.creditCart.findUnique({
+        const creditCardFounded = await prisma.creditCard.findUnique({
           where: {
             id,
             userId,
           },
         })
 
-        if (!creditCartFounded) {
+        if (!creditCardFounded) {
           throw new BadRequestError('Credit Cart not found')
         }
 
-        const creditCartEdited = await prisma.creditCart.update({
+        const creditCardEdited = await prisma.creditCard.update({
           data: {
             name,
             ownerCurrentName,
@@ -65,7 +65,7 @@ export async function updateCreditCartWithId(app: FastifyInstance) {
         })
 
         return reply.status(200).send({
-          creditCardId: creditCartEdited.id,
+          creditCardId: creditCardEdited.id,
         })
       },
     )
