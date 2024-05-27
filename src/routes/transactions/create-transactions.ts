@@ -15,23 +15,23 @@ export async function createTransactions(app: FastifyInstance) {
       '/transaction',
       {
         schema: {
-          tags: ['Transactions'],
+          tags: ['Transaction'],
           summary: 'Create a transaction',
           body: z.object({
             amount: z.number(),
             type: z.union([
               z.literal('INCOME'),
               z.literal('EXPENSE'),
-              z.literal('INVESTIMENT'),
+              z.literal('INVESTMENT'),
             ]),
             description: z.string().nullable().optional(),
             date: z.date(),
-            isRepet: z.boolean().default(false),
-            repetTimes: z.number().optional(),
+            isRepeat: z.boolean().default(false),
+            repeatTimes: z.number().optional(),
             categoryId: z.string(),
             walletId: z.string().optional().nullable(),
             creditCardId: z.string().optional().nullable(),
-            investimentsId: z.string().optional().nullable(),
+            investmentsId: z.string().optional().nullable(),
           }),
           response: {
             201: z.null(),
@@ -42,11 +42,11 @@ export async function createTransactions(app: FastifyInstance) {
         const {
           categoryId,
           date,
-          isRepet,
+          isRepeat,
           creditCardId,
           description,
-          investimentsId,
-          repetTimes,
+          investmentsId,
+          repeatTimes,
           walletId,
           amount,
           type,
@@ -92,34 +92,34 @@ export async function createTransactions(app: FastifyInstance) {
           }
         }
 
-        if (investimentsId) {
-          const investimentsFounded = await prisma.investiments.findUnique({
+        if (investmentsId) {
+          const investmentsFounded = await prisma.investment.findUnique({
             where: {
-              id: investimentsId,
+              id: investmentsId,
               userId,
             },
           })
 
-          if (!investimentsFounded) {
-            throw new BadRequestError("Investiments doesn't exist")
+          if (!investmentsFounded) {
+            throw new BadRequestError("Investments doesn't exist")
           }
         }
 
-        if (isRepet && !!repetTimes) {
+        if (isRepeat && !!repeatTimes) {
           await prisma.transaction.createMany({
-            data: Array.from({ length: repetTimes }).map((_, index) => ({
+            data: Array.from({ length: repeatTimes }).map((_, index) => ({
               amount,
               type,
-              description: `${description} - ${index + 1}/${repetTimes}`,
+              description: `${description} - ${index + 1}/${repeatTimes}`,
               date: new Date(
                 new Date(date).setMonth(new Date(date).getMonth() + index),
               ),
-              isRepet,
-              repetTimes,
+              isRepeat,
+              repeatTimes,
               categoryId,
               walletId,
               creditCardId,
-              investimentsId,
+              investmentsId,
               userId,
             })),
           })
@@ -131,12 +131,12 @@ export async function createTransactions(app: FastifyInstance) {
             type,
             description,
             date,
-            isRepet,
-            repetTimes,
+            isRepeat,
+            repeatTimes,
             categoryId,
             walletId,
             creditCardId,
-            investimentsId,
+            investmentsId,
             userId,
           },
         })

@@ -107,7 +107,7 @@ async function seed() {
     ],
   })
 
-  const investmentsLCA = await prisma.investiments.create({
+  const investmentsLCA = await prisma.investment.create({
     data: {
       type: 'FUND',
       name: 'Investimento em LCA 2024',
@@ -119,14 +119,14 @@ async function seed() {
 
   await prisma.transaction.create({
     data: {
-      type: 'INVESTIMENT',
+      type: 'INVESTMENT',
       amount: 1000,
       description: 'Investimento em LCA',
       date: new Date(),
       userId: user.id,
       categoryId: investmentsCategory.id,
       walletId: interInvestmentsWallet.id,
-      investimentsId: investmentsLCA.id,
+      investmentsId: investmentsLCA.id,
     },
   })
 }
